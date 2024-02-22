@@ -1,0 +1,31 @@
+name: do-parking-stats
+
+services:
+  db:
+    container_name: postgres-db
+    image: "postgres:16.2-alpine"
+    hostname: postgres
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports: # for communication outside of db-data
+      - "5432:5432"
+    networks:
+      - db-data
+
+  collector:
+    image: "parking-stats-collector"
+    build: .
+    depends_on:
+      - db
+    init: true # handles signals and forwards logs
+    networks:
+      - db-data
+
+volumes:
+  postgres-data:
+
+networks:
+  db-data:
+    driver: bridge
