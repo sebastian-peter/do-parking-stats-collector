@@ -2,7 +2,6 @@ name: do-parking-stats
 
 services:
   db:
-    container_name: postgres-db
     image: "postgres:16.2-alpine"
     hostname: postgres
     restart: unless-stopped

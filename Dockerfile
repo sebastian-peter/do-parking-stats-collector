@@ -19,7 +19,6 @@ RUN mkdir /cron \
 # install stats collector
 WORKDIR /dpsc
 COPY . .
-RUN cargo install --path .
+RUN cargo install --path . && chmod +x docker/entrypoint.sh
 
-# Run cron in foreground
-CMD ["supercronic", "/cron/stats_collector"]
+ENTRYPOINT ["docker/entrypoint.sh"]
