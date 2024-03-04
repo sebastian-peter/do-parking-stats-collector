@@ -15,10 +15,23 @@ Parking statistics are stored in a postgres database.
     DATABASE_URL=${CONNECTION_URL}/${DATABASE_NAME}
     ```
 
-    For usage with diesel, the host name has to be localhost.
-
 2. Create and start the docker containers. Required databases and tables are created automatically.
 
     ```shell
     docker compose up -d
     ```
+
+## Bonus: Backups
+
+- Create backup
+
+    ```shell
+    docker exec -t do-parking-stats-db-1 pg_dumpall -c -U db_user > dump_`date +%Y-%m-%d"_"%H_%M_%S`.sql
+    ```
+
+- Restore from backup (drops and replaces all data!)
+
+    ```shell
+    cat dump_<date>.sql | docker exec -i do-parking-stats-db-1 psql -U db_user
+    ```
+  
